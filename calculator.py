@@ -1,6 +1,6 @@
 import numpy as np
-# def moving_average_10(li,N=10):
-#     return li.Series(x).rolling(window=N).mean().iloc[N-1:].values
+
+'''These methods take in a list of values and return a calculated list'''
 def moving_average(li, N):
     cumsum, moving_aves = [0], []
 
@@ -20,15 +20,16 @@ def moving_average(li, N):
     return moving_aves
 import pandas as pd
 
-def ema(f, period):
-    data = f['Close'].ewm(span=period).mean()
-    data.head(period)
-    data = np.round(data, decimals=3)
-    # print(data)
+# def ema(f, period):
+#     data = f['Close'].ewm(span=period).mean()
+#     data.head(period)
+#     data = np.round(data, decimals=3)
+#     # print(data)
     
-    data.iloc[0:period] = f[0:period]['ma']
-    f.head(20)
-    return data
+#     data.iloc[0:period] = f[0:period]['ma']
+#     f.head(20)
+#     return data
+'''s is list, n is period, ma is moving average'''
 def ema_2(s,n, ma):
     """
     returns an n period exponential moving average for
@@ -58,6 +59,26 @@ def ema_2(s,n, ma):
     ema = list(ma[0:n-1]) + list(ema)
     
     return list(ema)
+
+''' Some data
+Open,High,Low,Close,Volume
+186.7,186.85,186.7,186.85,0
+186.7,186.82,186.65,186.82,0
+186.99,186.99,186.99,186.99,0
+186.65,186.65,186.65,186.65,0
+186.76,186.76,186.6,186.6,0
+186.6,186.6,186.6,186.6,0
+186.79,186.79,186.67,186.67,0
+186.9,186.9,186.9,186.9,0
+'''
+
+open = [186.7,186.7,186.99,186.65,186.76,186.6,186.79,186.9]
+high = [186.85,186.82,186.99,186.65,186.76,186.6,186.79,186.9] # not really using
+low = [186.7,186.65,186.99,186.65,186.6,186.6,186.67,186.9] # not really using
+Close = [186.85,186.82,186.99,186.65,186.6,186.6,186.67,186.9]
+Volume = [0,0,0,0, 0,0,0,0]
+
+
 
 test = [10,9,8,7,6,5,4,3,2,1]
 ma = list(moving_average(test,5))
