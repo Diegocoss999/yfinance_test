@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 '''These methods take in a list of values and return a calculated list'''
 def moving_average(li, N):
     cumsum, moving_aves = [0], []
@@ -18,7 +18,7 @@ def moving_average(li, N):
             moving_aves.append(moving_ave)
     moving_aves = np.round(moving_aves, decimals=3)
     return moving_aves
-import pandas as pd
+
 
 # def ema(f, period):
 #     data = f['Close'].ewm(span=period).mean()
@@ -54,8 +54,8 @@ def ema_2(s,n, ma):
         j = j + 1
         ema.append(tmp)
     #
-    print(ma[0:n-1])
-    print(ema)
+    # print(ma[0:n-1])
+    # print(ema)
     ema = list(ma[0:n-1]) + list(ema)
     
     return list(ema)
