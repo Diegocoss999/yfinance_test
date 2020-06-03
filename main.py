@@ -25,7 +25,6 @@ import matplotlib.dates as mdates
  
 
 #files from folder
-import indicator 
 import stocktest
 import download
 # Planning to use
@@ -40,39 +39,9 @@ if True:
     from matplotlib.backends.backend_tkagg import *
 '''   
 # globals
-folder = 'data/pickle/'
-
-def get(symbol):
-    d1m = download.update_files(symbol)
-    frames = [symbol,d1m]#,d2m,d1h,d1d]
-    return frames
-
-
-def build(frames):
-    macd = indicator.macd(frames)
-    print(stocktest.test("macd", macd))
-    # sma_ema = indicator.sma_ema(frames)
-    # stocktest.test("sma_ema", sma_ema)
-
-# def open_folder(folder, symboltype= "*.csv"):
-#     path_folder = Path(folder)
-#     folder_search = os.path.join(path_folder, Path(type))
-#     files= glob.glob(folder_search)
-#     print(files)
-#     return files
-
-# def read_folder():
-#     # read old downloaded data
-#     for f in  open_folder("", type=s+"_7d_1m"):
-#         frame = pd.read_csv(f)
-#         print(frame)
-#         print(frame.iloc[0]['Datetime'])
-
 
 if __name__ == "__main__":
     s = "MSFT" # or ['','']
-    fs = get(s)
-    # build(fs)
-    # plot(s)
-    # test(s)
+    frame = download.update_files(s)
+    stocktest.stock_test(s,frame)
 

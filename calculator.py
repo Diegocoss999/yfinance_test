@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import statistics
+
 '''These methods take in a list of values and return a calculated list'''
 def moving_average(li, N):
     cumsum, moving_aves = [0], []
@@ -49,7 +51,10 @@ def ema_2(s,n, ma):
     ema = list(ma[0:n-1]) + list(ema)
     
     return list(ema)
-
+# TODO Alex
+# statistics.stdev(A_rank)
+def stdev(s_list, period):
+    pass
 ''' Some data
 Open,High,Low,Close,Volume
 186.7,186.85,186.7,186.85,0

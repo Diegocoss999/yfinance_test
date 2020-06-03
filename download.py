@@ -4,8 +4,30 @@ import datetime
 from datetime import timedelta
 import pandas as pd
 import pickle
-
+import glob
+import os
+from pathlib import Path
 folder = 'data/pickle/'
+
+# def open_folder(folder,  type= "*.csv"):
+#     path_folder = Path(folder)
+#     folder_search = os.path.join(path_folder, Path(type))
+#     files= glob.glob(folder_search)
+#     print(files)
+#     return files
+
+# def read_folder():
+#     type = type=s+"_7d_1m"
+#     path_folder = Path(folder)
+#     folder_search = os.path.join(path_folder, Path(type))
+#     files= glob.glob(folder_search)
+#     # read old downloaded data
+#     for f in  files:
+#         frame = pd.read_csv(f)
+#         print(frame)
+#         print(frame.iloc[0]['Datetime'])
+
+
 # dict extentions
 def concat(self,d2):
     # end of self's last date

@@ -1,9 +1,13 @@
 '''Test stock preformance'''
-# pip3 install yfinance pandas matplotlibpytz
-def test(type, lis):
+import indicator
+import download
+def stock_test(symbol, frame):
+    f1 = indicator.build(symbol, frame)
+    for f in f1:
+        run('macd',f)
+def run(type, lis):
     initial = 10000
     money = 10000
-    # goal = 7 #%
     percent = 0
     holdings = 0
 
