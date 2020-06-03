@@ -2,103 +2,145 @@
 # -*- coding: UTF-8 -*-
 #
 # Yahoo! Finance market data downloader (+fix for Pandas Datareader)
-# https://github.com/ranaroussi/yfinance
-# Dataframe Notes: df.iloc[0]['A']
+# https://github.com/Diegocoss999/yfinance_test
 """
-Sanity check for most common library uses all working
+Goal: Test various stock trading strategies.
 
-- Stock: Microsoft
-- ETF: Russell 2000 Growth
-- Mutual fund: Vanguard 500 Index fund
-- Index: S&P500
-- Currency BTC-USD
 """
-
+# import
 from __future__ import print_function
-import yfinance as yf
 import datetime
 from datetime import timedelta
-import pandas as pd
-import pandas_datareader as pdr
 import glob
 import os
 from pathlib import Path
-# import tkinter as tk
+# pip3 install yfinance pandas matplotlibpytz
+import yfinance as yf
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-# import matplotlib
-# matplotlib.use("TkAgg")
-# if True:
-#     from matplotlib.figure import Figure
-#     from matplotlib import *
-#     from matplotlib.backends import *
-#     from matplotlib.backends.backend_tkagg import *
-
+from pytz import timezone
+import csv
+import pickle
+#files from folder
 import indicator 
 import stocktest
+# Planning to use
+''' 
+import tkinter as tk
+import matplotlib
+matplotlib.use("TkAgg")
+if True:
+    from matplotlib.figure import Figure
+    from matplotlib import *
+    from matplotlib.backends import *
+    from matplotlib.backends.backend_tkagg import *
+'''   
+# globals
+folder = 'data/pickle/'
+# dict extentions
+def concat(self,d2):
+    # end of self's last date
+    date_str = str(self['Datetime'][-1])
+    date = datetime.datetime.strptime(date_str[0:16],'%Y-%m-%d %H:%M')
+    # check that d2 dates are not repeats
+    for index in range(len(list(self['Datetime']))):
+        date_2_str = str(d2['Datetime'][index])
+        date_2 = datetime.datetime.strptime(date_2_str[0:16],'%Y-%m-%d %H:%M')
+        if date < date_2: # in order dates
+            # Add d2 to self
+            for key in list(self.keys()):
+                if key != '':
+                    self[key] = list(self[key]) + list(d2[key][index:len(d2[key])])
 
-         
-def get_1m(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
-    file = 'data/'+symbol+"_1m.csv"
+def save(df, file):
+    file = folder +file +'.pkl'
+    f = open(file,"wb")
+    pickle.dump(dict(df),f)
+    f.close()
+    # delete = True
+    # for key in list(df.keys()):
+    #     if key == 'Datetime':
+    #         delete = False
+    #     if delete:
+    #         del df[key]
+def read( file):
+    file = folder +file +'.pkl'
+    f = open(file,"rb")
+    df = pickle.load(f)
+    f.close()
+    delete = True
+    for key in list(df.keys()):
+        if key == 'Datetime':
+            delete = False
+        if delete:
+            del df[key]
+    return df
+def dict_fix(d):
+    
+    for s in list(d.keys()):
+        li = list()
+        for key, value in d[s].items():
+            li.append(value)
+        d[s] = li
+def dumb_code(df, file):
+    df.to_csv(file)
+    df = pd.read_csv(file)
+    df = df.to_dict()
+    dict_fix(df)
+    return df
+def dict_demo():
+    file = 'data/1m_test'
+    d1 = {"Datetime": ['2020-05-27 04:15','2020-05-27 04:16' ],"Close": [180,181],"Open": [190,191]}
+    d2 = {"Datetime": ['2020-05-27 04:16' ,'2020-05-27 04:17','2020-05-27 04:18'  ],"Close": [180,190,191],"Open": [180,200,201]}
+    concat(d1, d2)
+    print(d1)
+    save(d1, file)
+    del d1
+    d1 = dict()
+    d1 = read(file)
+    print(d1)
+def get_1m(symbol, end=datetime.datetime.now()):
+    file = symbol+"_1m"
     df = pd.DataFrame()
     try: # if exists append
         # TODO
-        df = pd.read_csv(file)
-        s = df.iloc[-1]["Datetime"].split('-')
-        # if datetime.date(int(s[0]),int(s[1]),int(s[2].split(' ')[0])) != datetime.date.today():
-        #     df2 = df = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-        #     df = pd.concat([df,df2]).drop_duplicates()
+        df = read(file)
+        date_str = df['Datetime'][-1][0:16]
+        # 2020-05-26 19:10
+        date = datetime.datetime.strptime(date_str,'%Y-%m-%d %H:%M')
+        end = end + timedelta(hours=3)
+        end = datetime.datetime(year=end.year,month=end.month,day=end.day,hour=end.hour,minute=end.minute)
+        if date < end:
+            df2 = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
+            df2 = dumb_code(df2, folder+'t.csv')
+            concat(df,df2)
+            save(df, file)
+            print(df["Datetime"][-1])
     except(FileNotFoundError ): # create new
-        # print("error")
         df = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-    # df.to_csv(file)
-    return df
-
-def get_2m(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
-    file = 'data/'+symbol+"_2m.csv"
-    df = None
-    try: # if exists append
-        df = pd.read_csv(file)
-        # df2 = df = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-        # df = pd.concat([df,df2]).drop_duplicates()
-    except(FileNotFoundError): # create new
-        df = yf.download(symbol,interval = "2m", start=end- timedelta(days=29,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-    # df.to_csv(file)
-    return df
-def get_1h(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
-    file = 'data/'+symbol+"_1h.csv"
-    df = None
-    try: # if exists append
-        # TODO
-        df = pd.read_csv(file)
-        # df2 = df = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-        # df = pd.concat([df,df2]).drop_duplicates()
+        df = dumb_code(df, folder+'t.csv')
+        save(df, file)
         # print(df)
-    except(FileNotFoundError): # create new
-        df = yf.download(symbol,interval = "1h", start=end- timedelta(days=729,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-    # df.to_csv(file)
     return df
-def get_1d(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
-    file = 'data/'+symbol+"_1d.csv"
-    df = None
-    try: # if exists append
-        # TODO
-        df = pd.read_csv(file)
-        # df2 = df = yf.download(symbol,interval = "1m", start=end- timedelta(days=6,minutes=59), end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
-        # df = pd.concat([df,df2]).drop_duplicates()
-    except(FileNotFoundError): # create new
-        df = yf.download(symbol,interval = "1d", start=start, end=end,auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
 
-    # df.to_csv(file)
-    return df
+# def get_2m(symbol, end=datetime.date.now(timezone('EST'))):
+#     file = 'data/'+symbol+"_2m.csv"
+#     return df
+# def get_1h(symbol, end=datetime.date.today()):
+#     file = 'data/'+symbol+"_1h.csv"
+#     return df
+# def get_1d(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
+#     file = 'data/'+symbol+"_1d.csv"
+#     return df
 
 def get(symbol,start=datetime.datetime(1,1,1), end=datetime.date.today()):
     d1m = get_1m(symbol)
-    d2m = get_2m(symbol)
-    d1h = get_1h(symbol)
-    d1d = get_1d(symbol)
+    # d2m = get_2m(symbol)
+    # d1h = get_1h(symbol)
+    # d1d = get_1d(symbol)
     '''process'''
-    frames = [symbol,d1m,d2m,d1h,d1d]
+    frames = [symbol,d1m]#,d2m,d1h,d1d]
     return frames
 
 def plot(symbol):
@@ -162,8 +204,8 @@ if __name__ == "__main__":
     # test_yfinance()
     s = "MSFT" # or ['','']
     fs = get(s)
-    build(fs)
-    plot(s)
+    # build(fs)
+    # plot(s)
     # test(s)
 
 # def gui():
