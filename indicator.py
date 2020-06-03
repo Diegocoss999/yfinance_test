@@ -1,3 +1,4 @@
+"""Different stock selling strategies"""
 import pandas as pd
 import numpy as np
 import calculator

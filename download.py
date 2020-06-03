@@ -1,3 +1,4 @@
+"""Download stock data"""
 import yfinance as yf
 import datetime
 from datetime import timedelta

@@ -19,16 +19,6 @@ def moving_average(li, N):
     moving_aves = np.round(moving_aves, decimals=3)
     return moving_aves
 
-
-# def ema(f, period):
-#     data = f['Close'].ewm(span=period).mean()
-#     data.head(period)
-#     data = np.round(data, decimals=3)
-#     # print(data)
-    
-#     data.iloc[0:period] = f[0:period]['ma']
-#     f.head(20)
-#     return data
 '''s is list, n is period, ma is moving average'''
 def ema_2(s,n, ma):
     """
