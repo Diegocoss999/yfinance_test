@@ -1,4 +1,5 @@
 '''Test stock preformance'''
+# pip3 install yfinance pandas matplotlibpytz
 def test(type, lis):
     initial = 10000
     money = 10000
@@ -28,10 +29,10 @@ def test(type, lis):
 
 def buy(money, price):
     remaining = 0
-    bought = 0
     can_buy =int(money/ price)
     remaining = money - can_buy*price
     return [remaining, can_buy]
 
 def sell(number, price):
     return [number*price, 0]
+

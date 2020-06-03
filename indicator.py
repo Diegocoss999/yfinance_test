@@ -24,19 +24,20 @@ def macd(frames):
     #save
     df.to_csv('data/'+frames[0]+"_1m_macd.csv")
     return [df['Datetime'], df['Close'], df['ema '+str(e1)+'-'+str(e2)],df['ema '+str(e3)] ]
-
+# TODO
 def sma_ema(frames):
     p1 = 5
-    p2 = 20
-    p3 = 10
-    df = frames[1].copy()
-    # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    '''short term sma'''
-    df['ma'] = calculator.moving_average(df['Close'],p3)
-    df['moving average '+str(p1)] = calculator.moving_average(df['Close'],p1)
-    df['moving average '+str(p3)] = calculator.moving_average(df['Close'],p3)
-    df['moving average '+str(p2)] = calculator.moving_average(df['Close'],p2)
-    df['moving average '+str(p3)] = calculator.ema_2(df,p3,df['ma'])
-    #save
-    df.to_csv('data/'+frames[0]+"_1m_sma-ema.csv")
-    return [df['Datetime'], df['Close'], df['moving average '+str(p1)], df['moving average '+str(p3)], df['moving average '+str(p2)], df['moving average '+str(p3)] ]
+    # p2 = 20
+    # p3 = 10
+    # df = frames[1].copy()
+    # # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
+    # '''short term sma'''
+    # df['ma'] = calculator.moving_average(df['Close'],p3)
+    # df['moving average '+str(p1)] = calculator.moving_average(df['Close'],p1)
+    # df['moving average '+str(p3)] = calculator.moving_average(df['Close'],p3)
+    # df['moving average '+str(p2)] = calculator.moving_average(df['Close'],p2)
+    # df['moving average '+str(p3)] = calculator.ema_2(df,p3,df['ma'])
+    # #save
+    # df.to_csv('data/'+frames[0]+"_1m_sma-ema.csv")
+    # return [df['Datetime'], df['Close'], df['moving average '+str(p1)], df['moving average '+str(p3)], df['moving average '+str(p2)], df['moving average '+str(p3)] ]
+# TODO gaussian 
