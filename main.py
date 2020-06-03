@@ -22,7 +22,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-
+ 
 
 #files from folder
 import indicator 
