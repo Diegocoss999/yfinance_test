@@ -43,7 +43,7 @@ if True:
 folder = 'data/pickle/'
 
 def get(symbol):
-    d1m = download.get_1m(symbol)
+    d1m = download.update_files(symbol)
     frames = [symbol,d1m]#,d2m,d1h,d1d]
     return frames
 

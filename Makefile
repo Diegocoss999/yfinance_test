@@ -1,7 +1,7 @@
 run: 
 	python3 main.py
 install:
-	#linux sudo apt-get install python-pip 
+	#linux: sudo apt-get install python-pip 
 	pip3 install yfinance
 	pip3 install pandas
 	pip3 install matplotlib
@@ -9,3 +9,6 @@ install:
 push:
 	git commit -a
 	git push
+
+help:
+	echo "run, install, push"
