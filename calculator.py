@@ -1,8 +1,9 @@
+'''These methods take in a list of values and return a calculated list'''
 import numpy as np
 import pandas as pd
 import statistics
 
-'''These methods take in a list of values and return a calculated list'''
+
 def moving_average(li, N):
     cumsum, moving_aves = [0], []
 
@@ -12,17 +13,14 @@ def moving_average(li, N):
             moving_ave = (cumsum[i] - cumsum[i-N])/N
             #can do stuff with moving_ave here
             moving_aves.append(moving_ave)
-        else:
-            temp = N
-            
-            moving_ave = (cumsum[i] - cumsum[0])/i
+        else:  
             #can do stuff with moving_ave here
-            moving_aves.append(moving_ave)
+            moving_aves.append((cumsum[i] - cumsum[0])/i)
     moving_aves = np.round(moving_aves, decimals=3)
     return moving_aves
 
 '''s is list, n is period, ma is moving average'''
-def ema_2(s,n, ma):
+def ema(s,n, ma):
     """
     returns an n period exponential moving average for
     the time series s
@@ -45,9 +43,6 @@ def ema_2(s,n, ma):
         tmp = ( (i - ema[j]) * multiplier) + ema[j]
         j = j + 1
         ema.append(tmp)
-    #
-    # print(ma[0:n-1])
-    # print(ema)
     ema = list(ma[0:n-1]) + list(ema)
     
     return list(ema)
@@ -78,4 +73,4 @@ Volume = [0,0,0,0, 0,0,0,0]
 test = [10,9,8,7,6,5,4,3,2,1]
 ma = list(moving_average(test,5))
 # print(ma)
-# print(ema_2(test ,3 ,ma))
+# print(ema(test ,3 ,ma))

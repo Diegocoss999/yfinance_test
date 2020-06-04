@@ -44,4 +44,3 @@ if __name__ == "__main__":
     s = "MSFT" # or ['','']
     frame = download.update_files(s)
     stocktest.stock_test(s,frame)
-

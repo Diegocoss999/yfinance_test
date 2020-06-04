@@ -8,7 +8,8 @@ import glob
 import os
 from pathlib import Path
 folder = 'data/pickle/'
-
+file_types = ['1m','2m','1h','1d']
+type_dates = {'1m':timedelta(days=6, hours=23,minutes=59),'2m':timedelta(days=11, hours=23,minutes=59),'1h':timedelta(days=729),'1d':timedelta(days=2019*365)}
 # def open_folder(folder,  type= "*.csv"):
 #     path_folder = Path(folder)
 #     folder_search = os.path.join(path_folder, Path(type))
@@ -84,9 +85,11 @@ def dict_demo():
     d1 = dict()
     d1 = read(file)
     print(d1)
-def update_files(symbol,interval='1m', end=datetime.datetime.now()):
+def update_file(symbol,interval='1m'):
+    end=datetime.datetime.now()
     file = symbol+"_"+interval
     df = pd.DataFrame()
+
     try: # if exists append
         # TODO
         df = read(file)
@@ -96,13 +99,22 @@ def update_files(symbol,interval='1m', end=datetime.datetime.now()):
         end = end + timedelta(hours=3)
         end = datetime.datetime(year=end.year,month=end.month,day=end.day,hour=end.hour,minute=end.minute)
         if date < end:
-            df2 = yf.download(symbol,period= '7d',interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
+            df2 = yf.download(symbol,start =  end - type_dates[interval], end=end+timedelta(hours=3),interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
             df2 = dumb_code(df2, folder+'t.csv')
             concat(df,df2)
             save(df, file)
             print(df["Datetime"][-1])
     except(FileNotFoundError ): # create new
-        df = yf.download(symbol,interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
+        df = yf.download(symbol,start = end - type_dates[interval], end=end +timedelta(hours=3), interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
         df = dumb_code(df, folder+'t.csv')
+        # print(df)
+        print(df['Datetime'][-1])
         save(df, file)
+        
     return df
+def update_files(symbol, end=datetime.datetime.now()):
+    file_types = ['1m','2m']#,'1h','1d']
+    frames = dict()
+    for type in file_types:
+        frames[type] = update_file(symbol, type)
+    return frames
