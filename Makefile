@@ -1,4 +1,5 @@
 run: 
+	clear
 	python3 main.py
 install:
 	#linux: sudo apt-get install python-pip 
@@ -9,6 +10,6 @@ install:
 push:
 	git commit -a
 	git push
-
+	clear
 help:
 	echo "run, install, push"

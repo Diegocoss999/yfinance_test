@@ -108,7 +108,7 @@ def update_file(symbol,interval='1m'):
         df = yf.download(symbol,start = end - type_dates[interval], end=end +timedelta(hours=3), interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
         df = dumb_code(df, folder+'t.csv')
         # print(df)
-        print(df['Datetime'][-1])
+        # print(df['Datetime'][-1])
         save(df, file)
         
     return df

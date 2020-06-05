@@ -24,22 +24,16 @@ def macd(s, type, frame):
     download.save(df,s+"_"+type+"_macd")
     return df
 # TODO
-def sma_ema(frames):
+def sma_short_long(s, type,frame):
+    short = 10
+    lon = 50
+    df = frame.copy()
+    df['sma short'] = calculator.moving_average(df['Close'],short)
+    df['sma long'] = calculator.moving_average(df['Close'],lon)
+    download.save(df,s+"_"+type+"_sma_short_long")
+    return df
+def sma_ema(s, type,frame):
     pass
-    # p1 = 5
-    # p2 = 20
-    # p3 = 10
-    # df = frames[1].copy()
-    # # df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    # '''short term sma'''
-    # ma_close = calculator.moving_average(df['Close'],p3)
-    # df['moving average '+str(p1)] = calculator.moving_average(df['Close'],p1)
-    # df['moving average '+str(p3)] = calculator.moving_average(df['Close'],p3)
-    # df['moving average '+str(p2)] = calculator.moving_average(df['Close'],p2)
-    # df['moving average '+str(p3)] = calculator.ema(df,p3,ma_close)
-    # #save
-    # df.to_csv('data/'+frames[0]+"_1m_sma-ema.csv")
-    # return [df['Datetime'], df['Close'], df['moving average '+str(p1)], df['moving average '+str(p3)], df['moving average '+str(p2)], df['moving average '+str(p3)] ]
 # TODO gaussian 
 '''
 strat['macd'] = [df,df,df,df]
@@ -52,5 +46,10 @@ def build(s, frames):
 
         m[file_types[i]] = macd(s, file_types[i], frames[file_types[i]])
     strat['macd'] = m
+    m  =dict()
+    for i in range(len(frames)):
+    
+        m[file_types[i]] = sma_short_long(s, file_types[i], frames[file_types[i]])
+    strat['sma short long'] = m
     # sma_ema = indicator.sma_ema(frames)
     return strat
