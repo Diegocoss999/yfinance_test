@@ -30,12 +30,15 @@ type_dates = {'1m':timedelta(days=6, hours=23,minutes=59),'2m':timedelta(days=11
 
 
 # dict extentions
+def inspect(df, strat='macd', interval='1m'):
+    pass
+
 def concat(self,d2):
     # end of self's last date
     date_str = str(self['Datetime'][-1])
     date = datetime.datetime.strptime(date_str[0:16],'%Y-%m-%d %H:%M')
     # check that d2 dates are not repeats
-    for index in range(len(list(self['Datetime']))):
+    for index in range(len(list(d2['Datetime']))):
         date_2_str = str(d2['Datetime'][index])
         date_2 = datetime.datetime.strptime(date_2_str[0:16],'%Y-%m-%d %H:%M')
         if date < date_2: # in order dates
@@ -99,13 +102,13 @@ def update_file(symbol,interval='1m'):
         end = end + timedelta(hours=3)
         end = datetime.datetime(year=end.year,month=end.month,day=end.day,hour=end.hour,minute=end.minute)
         if date < end:
-            df2 = yf.download(symbol,start =  end - type_dates[interval], end=end+timedelta(hours=3),interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
+            df2 = yf.download(symbol,start =  end - type_dates[interval], end=end+timedelta(hours=3),interval = interval, auto_adjust = False, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
             df2 = dumb_code(df2, folder+'t.csv')
             concat(df,df2)
             save(df, file)
             print(df["Datetime"][-1])
     except(FileNotFoundError ): # create new
-        df = yf.download(symbol,start = end - type_dates[interval], end=end +timedelta(hours=3), interval = interval, auto_adjust = True, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
+        df = yf.download(symbol,start = end - type_dates[interval], end=end +timedelta(hours=3), interval = interval, auto_adjust = False, prepost = True,threads = False,   proxy = "PROXY_SERVER" )
         df = dumb_code(df, folder+'t.csv')
         # print(df)
         # print(df['Datetime'][-1])
