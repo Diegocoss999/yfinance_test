@@ -30,8 +30,9 @@ type_dates = {'1m':timedelta(days=6, hours=23,minutes=59),'2m':timedelta(days=11
 
 
 # dict extentions
-def inspect(df, strat='macd', interval='1m'):
-    pass
+def delete(df):
+    for key in list(df.keys()):
+        df[key] = df[key][int(len(df[key])/2):len(df[key])]
 
 def concat(self,d2):
     # end of self's last date
@@ -46,6 +47,9 @@ def concat(self,d2):
             for key in list(self.keys()):
                 if key != '':
                     self[key] = list(self[key]) + list(d2[key][index:len(d2[key])])
+                    # self['Datetime'] = list(self['Datetime']) + list(d2['Datetime'][index:len(d2['Datetime'])])
+
+            return
 
 def save(df, file):
     file = folder +file +'.pkl'
@@ -53,7 +57,7 @@ def save(df, file):
     pickle.dump(dict(df),f)
     f.close()
 def read( file):
-    file = folder +file +'.pkl'
+    file = folder + file + '.pkl'
     f = open(file,"rb")
     df = pickle.load(f)
     f.close()

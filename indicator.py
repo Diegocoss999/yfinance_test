@@ -24,6 +24,10 @@ def macd(s, type, frame):
     df['Chart'] = dict()
     df['Chart']['ema '+str(e1)+'-'+str(e2)] = df['ema '+str(e1)+'-'+str(e2)]
     df['Chart']['ema '+str(e3)] = df['ema '+str(e3)]
+    del df['Open']
+    del df['Volume']
+    del df['High']
+    del df['Low']
     download.save(df,s+"_"+type+"_macd")
     return df
 # TODO
@@ -37,6 +41,10 @@ def sma_short_long(s, type,frame):
     df['Chart'] = dict()
     df['Chart']['sma short'] = df['sma short']
     df['Chart']['sma long'] = df['sma long']
+    del df['Open']
+    del df['Volume']
+    del df['High']
+    del df['Low']
     download.save(df,s+"_"+type+"_sma_short_long")
     return df
 
@@ -50,6 +58,10 @@ def sma_ema(s, type,frame):
     df['Chart'] = dict()
     df['Chart']['sma'] = df['sma']
     df['Chart']['ema'] = df['ema']
+    del df['Open']
+    del df['Volume']
+    del df['High']
+    del df['Low']
     download.save(df,s+"_"+type+"_sma_ema")
     return df
 # TODO gaussian 
@@ -61,7 +73,6 @@ def build(s, frames):
     m  = dict()
 
     for i in range(len(frames)):
-
         m[file_types[i]] = macd(s, file_types[i], frames[file_types[i]])
     strat['macd'] = m
     m  =dict()
@@ -75,5 +86,10 @@ def build(s, frames):
     
         m[file_types[i]] = sma_ema(s, file_types[i], frames[file_types[i]])
     strat['sma ema'] = m
+    # m  =dict()
+    # for i in range(len(frames)):
+    #     m[file_types[i]] = m[file_types[i]]
+    
+    # strat['normal']
     # sma_ema = indicator.sma_ema(frames)
     return strat

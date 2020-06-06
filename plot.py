@@ -69,7 +69,7 @@ class Graph(Frame):
         fig, (ax1, ax2) = plt.subplot(1, 2)
         fig, ((ax1, ax2), (ax3, ax4)) = plt.subplot(2, 2)
         '''
-        self.f = Figure(figsize=(10, 4))
+        self.f = Figure(figsize=(10, 4),dpi=100)
 
         self.plot = self.f.add_subplot(111)
 
@@ -79,11 +79,18 @@ class Graph(Frame):
         self.plot.set_xlabel("Time (min)", fontsize=14)
         # self.plot.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         # self.plot.gca().xaxis.set_major_locator(mdates.DayLocator(interval=5))
-        self.plot.plot(df['macd']['1m']['Datetime'], df['macd']['1m']['Close'])
+        self.plot.plot(df['sma short long']['1m']['Datetime'], df['sma short long']['1m']['Close'])
+        # for key in df['sma short long']['1m']['Chart'].keys():
+        #     self.plot.plot(df['sma short long']['1m']['Datetime'], df['sma short long']['1m']['Chart'][key])
+        # self.plot.plot(df['sma short long']['1m']['Datetime'], df['sma short long']['1m']['Performance'])
         self.plot.set_xticklabels([])
-        # self.plot.gca().axes.get_yaxis().set_visible(False)
+ 
         self.canvas = FigureCanvasTkAgg(self.f, self.graph)
         self.canvas.get_tk_widget().grid(row=0,column=0)
+        g = Frame(self.graph)
+        g.grid(row=2, column=0)
+        toolbar = NavigationToolbar2Tk(self.canvas,g)
+        toolbar.update()
         self.canvas.draw()
         # self.canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
     def prev_1(self):

@@ -23,10 +23,7 @@ def run(strat, type, df):
     close = df['Close']
     df['Performance'] = list()
     if strat == 'macd':
-        del df['Open']
-        del df['Volume']
-        del df['High']
-        del df['Low']
+
         e1e2 = df['ema 12-26']
         e3 = df['ema 9']
         sell_order = False
@@ -46,10 +43,6 @@ def run(strat, type, df):
     if strat =='gaussian':
         pass
     if strat =='sma short long':
-        del df['Open']
-        del df['Volume']
-        del df['High']
-        del df['Low']
         sma_short = df['sma short']
         sma_long = df['sma long']
         sell_order = False
@@ -65,10 +58,6 @@ def run(strat, type, df):
                     money, holdings = sell(holdings, close[i])
             df['Performance'].append(money)
     if strat =='sma ema':
-        del df['Open']
-        del df['Volume']
-        del df['High']
-        del df['Low']
         sma = df['sma']
         ema = df['ema']
         sell_order = False
@@ -83,6 +72,8 @@ def run(strat, type, df):
                 if holdings !=0:
                     money, holdings = sell(holdings, close[i])
             df['Performance'].append(money)
+    if strat =='normal':
+        pass
     # final money count
     if holdings != 0:
         money, holdings = sell(holdings, close[-1])
